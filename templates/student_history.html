@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Student History
+{% endblock %}
+
+{% block main %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope ="col">Quiz</th>
+                <th scope ="col">Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz in quizzes %}
+                <tr>
+                    <td>{{ quiz["quiz_name"] }}</td>
+                    <td>{{ quiz["score"] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <form action="/register" method="post" id ="form">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" id="username" name = "username" placeholder="Username" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" id="password" placeholder="Password" name = "password" type="password">
+        </div>
+         <div class="form-group">
+            <input class="form-control" id="confirmation" placeholder="Confirm Password" name = "confirmation" type="password">
+        </div>
+      <div class="form-group">
+            <label for="identity">Are you a teacher or student?</label>
+            <select class="form-control" id="identity" name = "identity">
+                  <option value = "teacher">teacher</option>
+                  <option value = "student">student</option>
+        </select>
+      </div>
+        <button class="btn btn-primary" type="submit" id="submit">Register</button>
+    </form>
+
+    <script type = text/javascript>
+        $(function(){
+            $("form").submit(function(event)
+            {
+                // Checks if username was entered
+                if  (!$("#username").val())
+                {
+                    alert('You must provide a username!');
+                    return false
+                }
+
+                // Checks if username is not taken
+                $.get('/check', { username: $("#username").val() }, function(data)
+                    {
+                        if (!data)
+                        {
+                            alert('Username is taken!');
+                            return false
+                        }
+                    });
+
+                // Checks if password was entered
+                if (!$("#password").val())
+                {
+                    alert('You must provide a password!')
+                    return false
+                }
+
+                // Checks if confirmation was entered
+                if (!$("#confirmation").val())
+                {
+                    alert('You must confirm your password!');
+                    return false
+                }
+
+                // Checks if password matches confirmation
+                if ($("#password").val() != $("#confirmation").val())
+                {
+                    alert('Passwords must match!');
+                    return false
+                }
+
+                // Checks if they selected identity
+                if(!$("#identity").val())
+                {
+                    alert("You must select if you are a teacher or a student!")
+                    return false
+                }
+                return true
+            });
+        });
+    </script>
+{% endblock %}
+
+

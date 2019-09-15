@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Teacher History
+{% endblock %}
+
+{% block main %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope ="col">Quiz</th>
+                <th scope ="col">Average Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for score in scores %}
+                <tr>
+                    <td>{{ score["quiz_name"] }}</td>
+                    <td>{{ score["score"] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form action="/scores" method="post" id ="form">
+      <div class="form-group">
+            <label for="quiz_name">Which quiz do you want to see individual scores for?</label>
+            <select class="form-control" id="quiz_name" name = "quiz_name">
+                {% for score in scores %}
+                  <option value = "{{ score["quiz_name"] }}">{{ score["quiz_name"] }}</option>
+                 {% endfor %}
+        </select>
+      </div>
+        <button class="btn btn-primary" type="submit" id="submit">See Scores</button>
+    </form>
+
+
+{% endblock %}

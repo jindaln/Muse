@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Quiz
+{% endblock %}
+
+{% block script %}
+<script>
+
+    // loads html first
+    $('document').ready(function(){
+
+        var hits = 0;
+        var song = 0;
+        var startTime;
+        var endTime;
+
+        // records each hit of the space bar
+        $("body").keyup(function (e) {
+            if( e.keyCode == 32 ) {
+            e.preventDefault();
+            hits++;
+            }
+        })
+
+        // converts song ids to a json list
+        var songs = {{ tempo_songs|tojson }};
+
+        // iterates through each song in the list
+        for (i = 0; i < songs.length; i++)
+        {
+            // sets startTime
+            document.getElementById("starts" + songs[i]).addEventListener("click", function(){
+                startTime = Date.now();
+            });
+
+            // ends this tempo question
+            document.getElementById("endtempo_question_" + songs[i]).addEventListener("click", function()
+                {
+                    //ensures the function is only executed once
+                    var executed = false;
+                    if (!executed)
+                    {
+                        endTime = Date.now();
+
+                        // gets song id
+                        var x = this.id.split("_")[2];
+
+                        // sets tempo
+                        document.getElementById("tempo_question" + x).value = hits/((endTime-startTime)/(60000));
+                        song++;
+                        hits = 0;
+                        startTime = 0;
+                        endTime = 0;
+                        executed = true;
+                    }
+                });
+
+        }
+    });
+
+</script>
+{% endblock %}
+
+{% block main %}
+    <form action="/take" method="post" id ="form" novalidate>
+        <div class = "form-group">
+            <label>What is the name of the quiz?</label>
+            <input class="form-control" id="quiz_name" placeholder="Quiz Name" name = "quiz_name" type = "text">
+        </div>
+        <hr/>
+    {% for song in meter_songs %}
+        <div class="form-group">
+            <label> What is the meter of this song?</label><br>
+            <iframe src="{{ "https://open.spotify.com/embed/track/" + song}}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            <select class="custom-select" id="{{"meter_question" + song }}" name = "{{"meter_question" + song }}">
+                  <option value="3">3/4</option>
+                  <option value="4">4/4</option>
+                  <option value="5">5/4</option>
+                  <option value="6">6/4</option>
+                  <option value="7">7/4</option>
+            </select>
+        </div>
+        <hr/>
+    {% endfor %}
+    <label>Press start when you would like to start recording tempo and stop when you're done.</label>
+    <br>
+    {% for song in tempo_songs %}
+        <label> Tap the space bar the beat of this song.</label>
+        <input hidden type="number" id = "{{"tempo_question" + song }}" name = "{{"tempo_question" + song }}"></input>
+        <button type = "button" id = "{{"starts" + song }}"" class="btn btn-success" >Start</button>
+        <button type="button" id = "{{"endtempo_question_" + song }}" class="btn btn-danger" >Stop</button><br><br>
+        <iframe src="{{ "https://open.spotify.com/embed/track/" + song}}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe><br>
+        <hr/>
+    {% endfor %}
+    {% for song in key_songs %}
+        <label> What is the key of this song?</label><br>
+        <iframe src="{{ "https://open.spotify.com/embed/track/" + song}}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <select class="custom-select" id="{{"key_question" + song }}" name = "{{"key_question" + song }}">
+              <option value="0">C</option>
+              <option value="1">C#</option>
+              <option value="2">D</option>
+              <option value="3">D#</option>
+              <option value="4">E</option>
+              <option value="5">F</option>
+              <option value="6">F#</option>
+              <option value="7">G</option>
+              <option value="8">G#</option>
+              <option value="9">A</option>
+              <option value="10">A#</option>
+              <option value="11">B</option>
+        </select><br>
+        <hr/>
+    {% endfor %}
+        <button class="btn btn-primary" type="submit" id="submit">Submit</button>
+    </form>
+
+{% endblock %}
+
+
+
+

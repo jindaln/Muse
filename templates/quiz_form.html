@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Make A Quiz
+{% endblock %}
+
+{% block main %}
+    <form action="/make_quiz" method="post" id ="form">
+        <div class="form-group">
+            <label> What would you like to name your quiz? (names must be unique)</label>
+            <input autocomplete="off" autofocus class="form-control" id= "quiz_name" name = "quiz_name" type="text">
+        </div>
+        <hr/>
+        <div class="form-group">
+            {% if meter_questions > 0 %}
+                <label> Which songs do you want to test for meter recognition?</label>
+                {% for i in range(meter_questions) %}
+                <input autocomplete="off" autofocus class="form-control" id= "{{"meter_question" + i|string }}" name = "{{"meter_question" + i|string }}" type="text">
+                {% endfor %}
+            {% endif %}
+        </div>
+        <hr/>
+        <div class="form-group">
+            {% if tempo_questions > 0 %}
+                <label> Which songs do you want to test for tempo replication?</label>
+                {% for i in range(tempo_questions) %}
+                <input autocomplete="off" autofocus class="form-control" id="{{"tempo_question" + i|string }}" name = "{{"tempo_question" + i|string }}" type="text">
+                {% endfor %}
+            {% endif %}
+        </div>
+        <hr/>
+        <div class="form-group">
+            {% if key_questions > 0 %}
+                <label> Which songs do you want to test for key recognition?</label>
+                {% for i in range(key_questions) %}
+                <input autocomplete="off" autofocus class="form-control" id="{{"key_question" + i|string }}" name = "{{"key_question" + i|string }}" type="text">
+                {% endfor %}
+            {% endif %}
+        </div>
+        <hr/>
+        <button class="btn btn-primary" type="submit" id="submit">Make quiz!</button>
+    </form>
+
+{% endblock %}
+
+{% block script %}
+    <script type = text/javascript>
+    // ask nikita
+    $(function(){
+            $("form").submit(function(event)
+            {
+
+                // Checks if quiz name is not taken
+                $.get('/check_name', { quiz_name: $("#quiz_name").val() }, function(data)
+                    {
+                        if (!data)
+                        {
+                            alert('Quiz name is taken!');
+                            return false;
+                        }
+                });
+
+                return true;
+
+            });
+    });
+    </script>
+{% endblock %}

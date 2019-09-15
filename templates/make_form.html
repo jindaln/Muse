@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Make A Quiz
+{% endblock %}
+
+{% block main %}
+    <form action="/make_form" method="post" id ="form">
+        <div class="form-group">
+            <label for="meter_questions"> How many meter testing questions would you like?</label>
+            <input autocomplete="off" autofocus class="form-control" id="meter_questions" name = "meter_questions" placeholder="0" type="number">
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label for="tempo_questions"> How many tempo testing questions would you like?</label>
+            <input autocomplete="off" autofocus class="form-control" id="tempo_questions" name = "tempo_questions" placeholder="0" type="number">
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label for="key_questions"> How many key testing questions would you like?</label>
+            <input autocomplete="off" autofocus class="form-control" id="key_questions" name = "key_questions" placeholder="0" type="number">
+        </div>
+        <hr/>
+        <button class="btn btn-primary" type="submit" id="submit">Generate Form</button>
+    </form>
+
+    <script type = text/javascript>
+        $(function(){
+            $("form").submit(function(event)
+            {
+                // Checks if fields were entered
+                if  (!$("#meter_questions").val() || !$("#tempo_questions").val() || !$("#key_questions").val())
+                {
+                    alert('You must provide a value for all fields!');
+                    return false;
+                }
+
+                // Checks if fields were positives
+                if  ($("#meter_questions").val() < 0 || $("#tempo_questions").val() < 0 || $("#key_questions").val() < 0)
+                {
+                    alert('You must provide a positive value for all fields!');
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
+{% endblock %}
+
+

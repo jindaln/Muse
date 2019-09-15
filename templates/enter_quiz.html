@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Take a Quiz
+{% endblock %}
+
+{% block main %}
+    <form action="/take_quiz" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="quiz_name" placeholder="Quiz name" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Take Quiz!</button>
+    </form>
+{% endblock %}
+
+
+
+
